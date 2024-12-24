@@ -1,0 +1,22 @@
+#!/usr/bin/python
+
+import sys
+
+if len(sys.argv) < 2:
+    print("Usage: mkimg <binary> <header>")
+    sys.exit(1)
+
+binary = open(sys.argv[1], "rb")
+header = open(sys.argv[2], "w")
+
+header.write("#ifndef IMG_H\n#define IMG_H\nstatic int data[] = {\n")
+
+while True:
+    b = binary.read(1)
+    if not b:
+        break
+    header.write(f"{b[0]},\n")
+
+header.write("}\n#endif")
+header.close()
+binary.close()
